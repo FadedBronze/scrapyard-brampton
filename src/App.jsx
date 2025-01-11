@@ -3,7 +3,7 @@ function App() {
   return (
     <div class="patrick relative w-full">
       <div class="absolute top-0 left-0 -z-10 w-full h-full" style={{
-        backgroundImage: 'url("/public/mattile.png")',
+        backgroundImage: 'url("/mattile.png")',
         backgroundSize: "contain",
         backgroundRepeat: 'repeat-y',
       }}></div>
@@ -25,7 +25,7 @@ function App() {
         paddingBottom: "2.5rem",
         paddingTop: "1rem",
       }}>
-        <img class="w-full h-full object-contain" src="/public/logobig.png"/>
+        <img class="w-full h-full object-contain" src="/logobig.png"/>
       </div>
       <article style={{
         paddingLeft: "calc(50vw - clamp(9.5rem, 25vw, 30rem))",
@@ -47,13 +47,13 @@ function App() {
       </div>
       <div class="w-full relative" style={{
         height: "10rem", 
-        backgroundImage: 'url("/public/paper.png")',
+        backgroundImage: 'url("/paper.png")',
         backgroundRepeat: 'no-repeat',
         backgroundSize: "100% 100%",
       }}>
         <div class="overflow-hidden hidden max-lg:block absolute top-0 left-1/2 w-[100%]" style={{
           transform: "translate(-50%, 2rem)",
-        }}> <img class="object-cover object-left-top w-full h-full" style={{transform: "scale(1.2)"}} src="/public/bramptonhall.png"/> </div>
+        }}> <img class="object-cover object-left-top w-full h-full" style={{transform: "scale(1.2)"}} src="/bramptonhall.png"/> </div>
       </div>
     </div>
   )
