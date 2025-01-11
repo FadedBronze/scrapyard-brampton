@@ -1,0 +1,12 @@
+.patrick {
+  font-family: "Patrick Hand SC", serif;
+  font-style: normal;
+}
+
+#root {
+  width: 100vw;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
