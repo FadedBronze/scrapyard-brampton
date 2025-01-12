@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 
 function App() {
-  const emailRef = useRef("")
+  const emailInputRef = useRef()
+  const signedUpEmailRef = useRef()
   const [showModal, setShowModal] = useState(false)
   const sentEmailRef = useRef(0)
 
@@ -22,9 +23,9 @@ function App() {
           transform: "translate(-50%, -50%)"
         }}>
           <h2 className="font-bold text-center text-2xl">Thanks for presigning up!</h2>
-          <p className="text-sm text-center">signed up with {emailRef.current} (send again to change)</p>
+          <p className="text-sm text-center">signed up with {signedUpEmailRef.current} (send again to change)</p>
           <p>You will recieve an email when signups open</p>
-          <p className="mb-2">This really helps us the demand for the event so thanks again!</p>
+          <p className="mb-2">This really helps us understand the demand for the event so thanks again!</p>
           <button onClick={() => {
             setShowModal(false)
           }} className="p-2 bg-yellow text-darkblue rounded-md w-full hover:bg-opacity-60">Got it!</button>
@@ -40,11 +41,10 @@ function App() {
           This site will be relocated by the time signups open at which point it will instead redirect there.
         </div>
         <nav className="text-white w-full flex gap-5 justify-center text-lg p-3">
-          <a href="#">Slack</a>
+          <a href="https://hackclub.com/slack">Slack</a>
           <a href="#">Instagram</a>
-          <a href="#">Home</a>
-          <a href="#">Faq</a>
-          <a href="#">Hack Club</a>
+          <a href="https://scrapyard.hackclub.com/">Learn More</a>
+          <a href="https://hackclub.com/">Hack Club</a>
         </nav>
       </header>
       <div style={{
@@ -85,14 +85,16 @@ function App() {
             },
             method: "POST",
             body: JSON.stringify({
-              email: emailRef.current 
+              email: emailInputRef.current.value
             })
           })
+          
+          signedUpEmailRef.current = emailInputRef.current.value;
+          emailInputRef.current.value = "";
+
           setShowModal(true)
         }}>
-        <input type="email" onChange={(e) => {
-          emailRef.current = e.currentTarget.value
-        }} className="grow bg-opacity-20 p-2 bg-white rounded placeholder:text-black placeholder:opacity-60 outline-none" placeholder="youremail@example.com" />
+        <input type="email" ref={emailInputRef} className="grow bg-opacity-20 p-2 bg-white rounded placeholder:text-black placeholder:opacity-60 outline-none" placeholder="youremail@example.com" />
         <button className="hover:bg-gray bg-white px-[8%] rounded">Notify me!</button>
       </form>
       <div className="w-full relative" style={{
