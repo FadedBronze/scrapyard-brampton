@@ -1,4 +1,4 @@
-const Airtable = require('airtable')
+import Airtable from 'airtable';
 
 export default async function Email(req, res) {
   const key = Netlify.env.get("AIRTABLE_EMAIL_LIST");
@@ -24,5 +24,5 @@ export default async function Email(req, res) {
     }
   })
 
-  return new Response(JSON.stringify({ message: "hello" })); 
+  return new Response("success", { status: 200 }); 
 }
