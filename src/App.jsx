@@ -1,17 +1,45 @@
+import { useRef, useState, useEffect } from 'react'
 
 function App() {
+  const emailRef = useRef("")
+  const [showModal, setShowModal] = useState(false)
+  const sentEmailRef = useRef(0)
+
+  useEffect(() => {
+    try {
+      const count = parseInt(localStorage.getItem("scrapyard-brampton-emails-sent"))
+      if (Number.isNaN(count)) {
+        return;
+      }
+      sentEmailRef.current = count
+    } catch(e) {}
+  }, [])
+
   return (
-    <div class="patrick relative w-full">
-      <div class="absolute top-0 left-0 -z-10 w-full h-full" style={{
+    <div className="patrick relative w-full">
+      {
+        showModal && <div className="rounded-md bg-white p-4 text-lg absolute top-1/2 left-1/2" style={{
+          transform: "translate(-50%, -50%)"
+        }}>
+          <h2 className="font-bold text-center text-2xl">Thanks for presigning up!</h2>
+          <p className="text-sm text-center">signed up with {emailRef.current} (send again to change)</p>
+          <p>You will recieve an email when signups open</p>
+          <p className="mb-2">This really helps us the demand for the event so thanks again!</p>
+          <button onClick={() => {
+            setShowModal(false)
+          }} className="p-2 bg-yellow text-darkblue rounded-md w-full hover:bg-opacity-60">Got it!</button>
+        </div>
+      }
+      <div className="absolute top-0 left-0 -z-10 w-full h-full" style={{
         backgroundImage: 'url("/mattile.png")',
         backgroundSize: "contain",
         backgroundRepeat: 'repeat-y',
       }}></div>
-      <header class="w-full">
-        <div class="p-1 text-center bg-red w-full text-darkblue text-md">
+      <header className="w-full">
+        <div className="p-1 text-center bg-red w-full text-darkblue text-md">
           This site will be relocated by the time signups open at which point it will instead redirect there.
         </div>
-        <nav class="text-white w-full flex gap-5 justify-center text-lg p-3">
+        <nav className="text-white w-full flex gap-5 justify-center text-lg p-3">
           <a href="#">Slack</a>
           <a href="#">Instagram</a>
           <a href="#">Home</a>
@@ -25,35 +53,57 @@ function App() {
         paddingBottom: "2.5rem",
         paddingTop: "1rem",
       }}>
-        <img class="w-full h-full object-contain" src="/logobig.png"/>
+        <img className="w-full h-full object-contain" src="/logobig.png"/>
       </div>
       <article style={{
         paddingLeft: "calc(50vw - clamp(9.5rem, 25vw, 30rem))",
         paddingRight: "calc(50vw - clamp(9.5rem, 25vw, 30rem))",
         paddingBottom: "2.5rem",
         lineHeight: "1.25rem",
-      }} class="[&_strong]:text-red text-white flex flex-col gap-3 md:text-center md:text-lg">
+      }} className="[&_strong]:text-red text-white flex flex-col gap-3 md:text-center md:text-lg">
         <p>Scrapyard is an event hosted at cities around the world where <strong>hackers compete to make the coolest junk</strong> - and its hosted by highschoolers.</p> 
         <p>Enter your <strong>email below</strong> to notify yourself when signups will open</p> 
         <p>Let us know if you can make it to scrapyard brampton on (<strong>march 15-16</strong>) for a weekends worth of making cool stuff and memories!</p> 
       </article>
-      <div style={{
+      <form style={{
         paddingLeft: "calc(50vw - clamp(9.5rem, 25vw, 30rem))",
         paddingRight: "calc(50vw - clamp(9.5rem, 25vw, 30rem))",
         paddingBottom: "2.5rem",
-      }} class="flex rounded w-full">
-        <input class="grow bg-opacity-20 p-2 bg-white rounded placeholder:text-black placeholder:opacity-60 outline-none" placeholder="youremail@example.com" />
-        <button class="bg-white px-[8%] rounded">Notify me!</button>
-      </div>
-      <div class="w-full relative" style={{
+      }} className="flex rounded w-full" onSubmit={(e) => {
+          e.preventDefault()
+
+          if (sentEmailRef.current > 15) {
+            return;
+          }
+          
+          sentEmailRef.current += 1;
+          localStorage.setItem("scrapyard-brampton-emails-sent", sentEmailRef.current.toString())
+
+          fetch("/.netlify/functions/email", {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+              email: emailRef.current 
+            })
+          })
+          setShowModal(true)
+        }}>
+        <input type="email" onChange={(e) => {
+          emailRef.current = e.currentTarget.value
+        }} className="grow bg-opacity-20 p-2 bg-white rounded placeholder:text-black placeholder:opacity-60 outline-none" placeholder="youremail@example.com" />
+        <button className="hover:bg-gray bg-white px-[8%] rounded">Notify me!</button>
+      </form>
+      <div className="w-full relative" style={{
         height: "10rem", 
         backgroundImage: 'url("/paper.png")',
         backgroundRepeat: 'no-repeat',
         backgroundSize: "100% 100%",
       }}>
-        <div class="overflow-hidden hidden max-lg:block absolute top-0 left-1/2 w-[100%]" style={{
+        <div className="overflow-hidden hidden max-lg:block absolute top-0 left-1/2 w-[100%]" style={{
           transform: "translate(-50%, 2rem)",
-        }}> <img class="object-cover object-left-top w-full h-full" style={{transform: "scale(1.2)"}} src="/bramptonhall.png"/> </div>
+        }}> <img className="object-cover object-left-top w-full h-full" style={{transform: "scale(1.2)"}} src="/bramptonhall.png"/> </div>
       </div>
     </div>
   )
